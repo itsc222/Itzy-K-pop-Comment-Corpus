@@ -10,7 +10,7 @@ API_KEY = 'AIzaSyCrF7Elesy9bqClDEPHWy_xy90y3B8O1f8'
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 # Specify the video ID for which you want to retrieve comments
-video_id = 'pNfTK39k55U'
+video_id = '-Zh0bj6S0Ms'
 
 schema = {
     'videoId': str,
@@ -140,7 +140,7 @@ data_full = pl.concat([extended_df, df_replies])
 
 videoID = comments_list['topLevelComment']['snippet']['videoId']
 
-data_full.write_csv(f'/Users/ischneid/Itzy-K-pop-Comment-Corpus/dataframes/{title[0:20]}.csv')
+data_full.write_csv(f'/Users/ischneid/Itzy-K-pop-Comment-Corpus/dataframes/{title[0:15]}.csv')
 
 # Step 2: Use glob to retrieve file paths
 folder_path = '/Users/ischneid/Itzy-K-pop-Comment-Corpus/dataframes'  # Replace with the path to your folder
@@ -168,7 +168,7 @@ df_lang_schema = {'textDisplay': str,
 df_lang = pl.DataFrame(schema=df_lang_schema)
 
 for phrase in comments:
-    languages = ['en', 'zh', 'pt', 'ru', 'es', 'ko']
+    languages = ['en', 'zh', 'pt', 'ru', 'es', 'ko', 'ja']
     langid.set_languages(languages)
     lang, confidence = langid.classify(phrase)
 
