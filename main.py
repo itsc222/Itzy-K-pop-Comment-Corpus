@@ -5,6 +5,14 @@ import glob
 import langid
 
 # Set your API key or OAuth credentials file path
+file_path = '/Users/ischneid/Itzy-K-pop-Comment-Corpus/apikey.txt'
+try:
+    with open(file_path, 'r') as file:
+        API_KEY = file.read()
+except FileNotFoundError:
+    print(f"File '{file_path}' not found.")
+except Exception as e:
+    print(f"An error occurred: {e}")
 API_KEY = 'AIzaSyCrF7Elesy9bqClDEPHWy_xy90y3B8O1f8'
 
 youtube = build('youtube', 'v3', developerKey=API_KEY)
