@@ -1,6 +1,0 @@
-#Use this code to start:
-export YOUTUBE_API_KEY=AIzaSyCrF7Elesy9bqClDEPHWy_xy90y3B8O1f8
-
-#ClientID (if needed)
-ClientID: 390011523872-9a3pu4n955e7lok3f671v0bbo6dqug8l.apps.googleusercontent.com
-ClientSecret: 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
