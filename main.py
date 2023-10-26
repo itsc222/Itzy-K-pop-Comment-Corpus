@@ -48,8 +48,9 @@ video_ids = ['pNfTK39k55U',
 schema = {
     'videoId': str,
     'title': str,
-    'commentId': str,  
+    'parentId': str,  
     'textDisplay': str,
+    'authorChannelId': str,
     'authorDisplayName': str,
     'likeCount': pl.Int64,
     'publishedAt': str,
@@ -71,6 +72,9 @@ for video_id in video_ids:
 
     results = response['items']
 
+    # print(results)
+    # quit()
+
     video_info = youtube.videos().list(
         part='snippet,statistics',  # Specify which parts of the video data you want
         id=video_id
@@ -91,8 +95,11 @@ for video_id in video_ids:
 
         import polars as pl
 
-        # Define the schema with 'str' for all columns
+        authorChannelId = str(comments_list['topLevelComment']['snippet']['authorChannelId']['value'])
+        authorChannelId = authorChannelId.replace('{', '').replace('}', '').replace('"', '')
 
+        # print((authorChannelId))
+        # quit()
 
         # Create an empty Polars DataFrame (datatable)
 
@@ -100,8 +107,9 @@ for video_id in video_ids:
         data = {
             'videoId': comments_list['topLevelComment']['snippet']['videoId'],
             'title': title,
-            'commentId': results[i]['snippet']['topLevelComment']['id'],
+            'parentId': results[i]['snippet']['topLevelComment']['id'],
             'textDisplay': comments_list['topLevelComment']['snippet']['textDisplay'],
+            'authorChannelId': authorChannelId,
             'authorDisplayName': comments_list['topLevelComment']['snippet']['authorDisplayName'],
             'likeCount': comments_list['topLevelComment']['snippet']['likeCount'],
             'publishedAt': comments_list['topLevelComment']['snippet']['publishedAt'],
@@ -121,8 +129,9 @@ for video_id in video_ids:
     schema2 = {  
                 'videoId': str,
                 'title': str,
-                'commentId': str,
+                'parentId': str,
                 'textDisplay': str,
+                'authorChannelId': str,
                 'authorDisplayName': str,
                 'likeCount': int,
                 'publishedAt': str,
@@ -146,12 +155,17 @@ for video_id in video_ids:
                     # Create an empty Polars DataFrame with the specified schema
                     empty_df = pl.DataFrame(schema=schema2)
 
+                    authorChannelId = str( replies[a]['snippet']['authorChannelId'])
+                    authorChannelId = authorChannelId.replace('{', '').replace('}', '').replace('"', '')
+
+
                     data2 = {  
                         'videoId': replies[a]['snippet']['videoId'],
                         'title': title,
-                        'commentId': replies[a]['id'],
+                        'parentId': replies[a]['id'],
                         'textDisplay': replies[a]['snippet']['textDisplay'],
-                        'authorDisplayName': replies[a]['snippet']['authorDisplayName'],
+                        'authorChannelId': authorChannelId,
+                        'authorDisplayName': comments_list['topLevelComment']['snippet']['authorDisplayName'],
                         'likeCount': replies[a]['snippet']['likeCount'],
                         'publishedAt': replies[a]['snippet']['publishedAt'],
                         'updatedAt': replies[a]['snippet']['updatedAt']}
