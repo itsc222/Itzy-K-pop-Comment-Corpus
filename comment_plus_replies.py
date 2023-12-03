@@ -18,7 +18,7 @@ API_KEY = 'AIzaSyCrF7Elesy9bqClDEPHWy_xy90y3B8O1f8'
 
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
-parentId = "UgzASpQyT3mx6LJbdWB4AaABAg"
+parentId = "Ugw2MgSKDOtCQYvDmvh4AaABAg"
 
 request = youtube.comments().list(
         part="snippet",
@@ -92,6 +92,9 @@ for i in index:
     df_full.extend(df)
 
 # print(df_full)
+
+print(df_full)
+quit()
 
 full_comment_thread = og_comment.extend(df_full)
 

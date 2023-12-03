@@ -18,30 +18,7 @@ API_KEY = 'AIzaSyCrF7Elesy9bqClDEPHWy_xy90y3B8O1f8'
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 # Specify the video ID for which you want to retrieve comments
-video_ids = ['pNfTK39k55U',
-             'uzt5RZKi3iI',
-             'dzLr_HNbpu4',
-             'zndvqTc4P9I',
-             'MR3BjoewdQc',
-             'WAHuBH8WFVY',
-             'wTowEKjDGkU',
-             '1YIqpPA9uV0',
-             'qOzGVI8bt0E',
-             'fE2h3lGlOsk',
-             'Ct3orGumsLs',
-             'MjCZfZfucEc',
-             'YfjWM50PHGI',
-             'QnpFfi1kwf4',
-             'lsMFZXJOHZ4',
-             'rZ57I4cSSBE',
-             'Hbb5GPxXF1w',
-             'bMSkW8byD3k',
-             '_ysomCGaZLw',
-             'XZvUnqvspxk',
-             'VTV6tgp_VwY',
-             'Mi32rCgW1aw',
-             'x0wTYYUIZgU',
-             '6uZy86ePgO0'
+video_ids = ['-8Z6XQAaLq8'
              ]
 
 
@@ -192,51 +169,6 @@ for video_id in video_ids:
     data_full.write_csv(f'/Users/ischneid/Itzy-K-pop-Comment-Corpus/dataframes/{video_id}.csv')
 
 
-# Step 2: Use glob to retrieve file paths
-folder_path = '/Users/ischneid/Itzy-K-pop-Comment-Corpus/dataframes'  # Replace with the path to your folder
-file_pattern = '*.csv'  # Adjust the pattern to match your file type (e.g., '*.csv', '*.parquet')
+print(data_full)
 
-file_paths = glob.glob(f'{folder_path}/{file_pattern}')
-
-# Initialize an empty list to store Polars DataFrames
-dfs = []
-
-# Step 3: Loop through file paths and read Polars DataFrames
-for file_path in file_paths:
-    df = pl.read_csv(file_path)  # Use pl.read_parquet() for Parquet files, adjust as needed
-    dfs.append(df)
-
-# Step 4: Combine Polars DataFrames into a single DataFrame
-combined_df = pl.concat(dfs)
-
-comments = combined_df['textDisplay'].to_list()
-
-df_lang_schema = {'textDisplay': str,
-                  'language': str,
-                  'confidence':pl.Float64}
-
-df_lang = pl.DataFrame(schema=df_lang_schema)
-
-for phrase in comments:
-    languages = ['en', 'zh', 'pt', 'ru', 'es', 'ko', 'ja']
-    langid.set_languages(languages)
-    lang, confidence = langid.classify(phrase)
-
-    data = {'textDisplay': phrase,
-            'language': lang,
-            'confidence': confidence}
-
-    df_phrase = pl.DataFrame(data)
-
-    df_lang.extend(df_phrase)
-
-# print(df_lang)
-
-combined_df = combined_df.join(df_lang, on = 'textDisplay', how = 'inner')
-
-
-combined_df.write_csv('/Users/ischneid/Itzy-K-pop-Comment-Corpus/full_table.csv')
-
-# Now, 'combined_df' contains all the data from the files in the folder.
-
-# print(df_lang)
+data_full.write_csv(f'/Users/ischneid/Itzy-K-pop-Comment-Corpus/{title}.csv')
